@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+</head>
+<body>
+
+</body>
+</html>
+<div class="form-container">
+    <form action="/admin" method="post">
+      <h3>Login</h3>
+        {% if error %}
+        <p style="color: red;">{{ error }}</p> <!-- Display error message -->
+        {% endif %}
+      <input type="email" name="email" required placeholder="Enter email">
+      <input type="password" name="password" required placeholder="Enter Password">
+
+      <input type="submit" name="submit" value="Login" class="form-btn">
+    </form>
+  </div>
