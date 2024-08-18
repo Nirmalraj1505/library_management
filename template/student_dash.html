@@ -26,12 +26,12 @@
 </ul>
 
 <div class="form-container" id="availability">
-        <form action="/bookdbs" method="post">
+        <form action="/bookdbse" method="post">
             <h3>books availability</h3>
             {% with messages=get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-            <div class="alert alert">{{message}}</div>
+            <div class="alert alert-info">{{message}}</div>
 
                 {% endfor %}
             {% endif %}
@@ -44,12 +44,20 @@
         </form>
 </div>
 <div class="form-container" id="reserve" >
-        <form action="/" method="post">
+        <form action="/bookreserve" method="post">
             <h3>books Reservation</h3>
+            {% with messages=get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{message}}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
             <input type="text" name="bname" required placeholder="Enter book name">
           <input type="text" name="author" required placeholder="Enter author name">
 
-          <input type="submit" name="submit" value="Login" class="form-btn">
+          <input type="submit" name="submit" value="submit" class="form-btn">
         </form>
 </div>
 <div class="form-container" id="returned" style="display:none" >
@@ -64,6 +72,9 @@
 <script>
     $(document).ready(function(){
       $(".alert").hide(5000);
+      {% if show_reserve %}
+            showContent('reserve');
+      {% endif %}
     });
 
 
