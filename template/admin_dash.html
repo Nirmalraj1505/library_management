@@ -12,24 +12,30 @@
 <body>
  <ul class="nav nav-tabs">
    <h3 class="col-md-10"><i class="fa-solid fa-graduation-cap"></i>DASHBOARD</h3>
+  <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Availability
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{{url_for('bookdb')}}" onclick="showContent('availability')"> book availability</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('booklist')}}" onclick="showContent('show_list')">book list</a></li>
+                </ul>
+              </li>
   <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">booked</a>
+    <a class="nav-link " href="{{'return_list'}}" onclick="showContent('return_list')">returned</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link " href="#">returned</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
+   <li class="nav-item">
+     <button type="button" class="btn btn-dark" onclick="window.location.href='{{url_for('logout_admin')}}'">Logout</button>
   </li>
 
 </ul>
-<div class="form-container">
+<div class="form-container" id="availability">
         <form action="/bookdb" method="post">
             <h3>books availability</h3>
             {% with messages=get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-            <div class="alert alert">{{message}}</div>
+            <div class="alert alert-success">{{message}}</div>
 
                 {% endfor %}
             {% endif %}
@@ -37,18 +43,89 @@
 
           <input type="text" name="bname" required placeholder="Enter book name">
           <input type="text" name="author" required placeholder="Enter author name">
-
+            <input type="text" name="isbn" required placeholder="Enter ISBN number">
+           <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
           <input type="submit" name="submit" value="Login" class="form-btn">
         </form>
       </div>
+ {% if show_list %}
+<div class="container" id="show_list" >
+    <table class="table table-striped">
+        <tr>
 
+            <th>BOOK</th>
+            <th>AUTHOR</th>
+            <th>ISBN</th>
+            <th>QUANTITY</th>
+
+        </tr>
+        {% for row in results %}
+        <tr>
+            <td>{{ row['bname'] }}</td>
+            <td>{{ row['author'] }}</td>
+            <td>{{ row['isbn'] }}</td>
+            <td>{{ row['quantity'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
 </div>
+ {% endif %}
+ {% if return_list %}
+<div class="container" id="return_list">
+    <table class="table table-striped">
+        <tr>
+            <th>Student Email</th>
+            <th>book</th>
+            <th>Author</th>
+            <th>isbn</th>
+            <th>date&time</th>
+
+        </tr>
+        {% for request in requests %}
+        <tr>
+            <td>{{ request['email'] }}</td>
+            <td>{{ request['book'] }}</td>
+            <td>{{ request['author'] }}</td>
+            <td>{{ request['isbn'] }}</td>
+            <td>{{ request['date&time'] }}</td>
+            <td>{{ request['status'] }}</td>
+            <td>
+                <form action="/accept_request" method="post" style="display:inline;">
+                    <input type="hidden" name="request_id" value="{{ request['email'] }}">
+                     <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                    <button type="submit" class="btn btn-success">Accept</button>
+                </form>
+                <form action="/decline_request" method="post" style="display:inline;">
+                    <input type="hidden" name="request_id" value="{{ request['email'] }}">
+                     <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                    <button type="submit" class="btn btn-danger">Decline</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
 </body>
 <script>
     $(document).ready(function(){
       $(".alert").hide(5000);
+      {% if show_list %}
+          showContent('show_list');
+      {% endif %}
+      {% if return_list %}
+          showContent('return-list');
+      {% endif %}
     });
+
+     function showContent(section) {
+        document.getElementById('availability').style.display = 'none';
+        document.getElementById('list').style.display = 'none';
+        document.getElementById('return_list').style.display = 'none';
+
+        document.getElementById(section).style.display = 'block';
+    }
 
 </script>
 </html>

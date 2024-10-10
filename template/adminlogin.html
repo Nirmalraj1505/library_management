@@ -18,7 +18,7 @@
         {% endif %}
       <input type="email" name="email" required placeholder="Enter email">
       <input type="password" name="password" required placeholder="Enter Password">
-
+       <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
       <input type="submit" name="submit" value="Login" class="form-btn">
     </form>
   </div>

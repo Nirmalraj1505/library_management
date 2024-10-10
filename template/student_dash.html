@@ -12,16 +12,24 @@
 <body>
 <ul class="nav nav-tabs">
    <h3 class="col-md-8"><i class="fa-solid fa-graduation-cap"></i>DASHBOARD</h3>
-    <li class="nav-item">
-    <a class="nav-link " href="#" onclick="showContent('availability')">availability</a>
-  </li>
+     <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Availability
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{{url_for('bookdbse')}}" onclick="showContent('availability')"> book availability</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('booklistse')}}" onclick="showContent('show_list')">book list</a></li>
+                </ul>
+              </li>
     <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="#" onclick="showContent('reserve')">Reserve</a>
   </li>
   <li class="nav-item">
     <a class="nav-link " href="#" onclick="showContent('returned')">returned</a>
   </li>
-
+ <li class="nav-item">
+     <button type="button" class="btn btn-dark" onclick="window.location.href='{{url_for('logout_student')}}'">Logout</button>
+  </li>
 
 </ul>
 
@@ -39,10 +47,51 @@
 
           <input type="text" name="bname" required placeholder="Enter book name">
           <input type="text" name="author" required placeholder="Enter author name">
-
-          <input type="submit" name="submit" value="Login" class="form-btn">
+            <input type="text" name="isbn" required placeholder="Enter ISBN number">
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+          <input type="submit" name="submit" value="Search" class="form-btn">
         </form>
+    </div>
+     {% if show_list %}
+<div class="container" id="show_list" >
+    <table class="table table-striped">
+        <tr>
+
+            <th>BOOK</th>
+            <th>AUTHOR</th>
+            <th>ISBN</th>
+            <th>QUANTITY</th>
+
+        </tr>
+        {% for row in results %}
+        <tr>
+            <td>{{ row['bname'] }}</td>
+            <td>{{ row['author'] }}</td>
+            <td>{{ row['isbn'] }}</td>
+            <td>{{ row['quantity'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
 </div>
+ {% endif %}
+    {% if show_email %}
+<div class="form-container">
+    <form method="POST" action="/bookdbse">
+        <label for="email">Enter your email to be notified when the book is available:</label>
+        <input type="email" name="email" required>
+        <input type="hidden" name="bname" value="{{ bname }}">
+        <input type="hidden" name="author" value="{{ author }}">
+        <input type="hidden" name="isbn" value="{{ isbn }}">
+         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+        <button type="submit" name="yes">Yes</button>
+        <button type="submit" name="no">No</button>
+    </form>
+</div>
+{% endif %}
+</div>
+
+
 <div class="form-container" id="reserve" >
         <form action="/bookreserve" method="post">
             <h3>books Reservation</h3>
@@ -56,17 +105,29 @@
 
             <input type="text" name="bname" required placeholder="Enter book name">
           <input type="text" name="author" required placeholder="Enter author name">
-
+            <input type="text" name="isbn" required placeholder="Enter ISBN number">
+           <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
           <input type="submit" name="submit" value="submit" class="form-btn">
         </form>
 </div>
-<div class="form-container" id="returned" style="display:none" >
-        <form action="/" method="post">
+<div class="form-container mt-5" id="returned" >
+        <form action="/bookreturn" method="post">
             <h3>books Returned</h3>
+            <div class="container mt-3">
+             {% with messages=get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{message}}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            </div>
+
             <input type="text" name="bname" required placeholder="Enter book name">
           <input type="text" name="author" required placeholder="Enter author name">
-
-          <input type="submit" name="submit" value="Login" class="form-btn">
+            <input type="text" name="isbn" required placeholder="Enter ISBN number">
+           <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+          <input type="submit" name="submit" value="send " class="form-btn">
         </form>
 </div>
 <script>
@@ -74,6 +135,12 @@
       $(".alert").hide(5000);
       {% if show_reserve %}
             showContent('reserve');
+      {% endif %}
+      {% if show_list %}
+          showContent('show_list');
+      {% endif %}
+      {% if show_return %}
+            showContent('returned');
       {% endif %}
     });
 

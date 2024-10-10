@@ -5,7 +5,8 @@
     align-items: center;
     padding: 20px;
     padding-bottom: 60px;
-    background-image:url('img/fsh1.jpg');
+    background-image: url("../images/backg.jpg");
+
     background-size:cover ;
 }
 .form-container form{
@@ -16,6 +17,9 @@
     box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
 
 }
+
+
+
 .form-container form h3{
     font-size: 30px;
     text-transform: uppercase;
@@ -23,7 +27,7 @@
     margin-bottom: 10px;
 }
 .form-container input,.form-container select{
-    width: 100%;
+    width: 90%;
     padding: 10px 20px;
     margin: 8px 0px;
     border-radius: 5px;
@@ -42,4 +46,13 @@
     background: crimson;
     color: #fbd0fb;
 
+}
+.navbar-nav {
+  display: flex;
+  justify-content: flex-start; /* Aligns items to the left */
+  width: 100%;
+}
+
+.navbar-nav .admin-item {
+  margin-left: auto; /* Pushes the Admin item to the right */
 }
