@@ -11,7 +11,7 @@
 </head>
 <body>
  <ul class="nav nav-tabs">
-   <h3 class="col-md-10"><i class="fa-solid fa-graduation-cap"></i>DASHBOARD</h3>
+   <h3 class="col-md-9"><i class="fa-solid fa-graduation-cap"></i>DASHBOARD</h3>
   <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Availability
@@ -45,7 +45,7 @@
           <input type="text" name="author" required placeholder="Enter author name">
             <input type="text" name="isbn" required placeholder="Enter ISBN number">
            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-          <input type="submit" name="submit" value="Login" class="form-btn">
+          <input type="submit" name="submit" value="submit" class="form-btn">
         </form>
       </div>
  {% if show_list %}

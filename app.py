@@ -98,6 +98,13 @@ def logout_student():
 def index():
     return render_template('index.html')
 
+@app.route('/adminlogin')
+def adminlogin():
+    return render_template('adminlogin.html')
+
+@app.route("/index1")
+def index1():
+    return render_template('index.html')
 
 #-------admin dashboard-------
 @app.route("/admin_dash")
@@ -199,7 +206,7 @@ def bookdb():
 
 #-------student_dash _book_reservation--------
 @app.route("/bookreserve",methods=['POST','GET'])
-def bookdbs():
+def bookreserve():
     if 'submit' in request.form:
         if request.method == 'POST':
             bname = request.form["bname"]
